@@ -3,7 +3,8 @@ const { ipcRenderer } = require("electron");
 
 if (!window.location.href.startsWith("https://kirka.io")) {
   Object.defineProperty(navigator, "userAgent", {
-    get: () => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+    get: () =>
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
   });
   window.require = undefined;
   document.querySelector("#juice-menu").remove();
@@ -51,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       container.insertBefore(
         joinBtn,
-        container.querySelector(".play-content-up")
+        container.querySelector(".play-content-up"),
       );
     }
   };
@@ -104,19 +105,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (settings.perm_crosshair) {
         styles.push(
-          ".crosshair-static { opacity: 1 !important; visibility: visible !important; display: block !important; }"
+          ".crosshair-static { opacity: 1 !important; visibility: visible !important; display: block !important; }",
         );
       }
 
       if (settings.hide_chat) {
         styles.push(
-          ".desktop-game-interface > .chat { display: none !important; }"
+          ".desktop-game-interface > .chat { display: none !important; }",
         );
       }
 
       if (settings.hide_interface) {
         styles.push(
-          ".desktop-game-interface, .crosshair-cont, .ach-cont, .hitme-cont, .sniper-mwNMW-cont, .team-score, .score { display: none !important; }"
+          ".desktop-game-interface, .crosshair-cont, .ach-cont, .hitme-cont, .sniper-mwNMW-cont, .team-score, .score { display: none !important; }",
         );
       }
 
@@ -126,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (settings.interface_opacity) {
         styles.push(
-          `.desktop-game-interface { opacity: ${settings.interface_opacity}% !important; }`
+          `.desktop-game-interface { opacity: ${settings.interface_opacity}% !important; }`,
         );
       }
 
@@ -135,28 +136,28 @@ document.addEventListener("DOMContentLoaded", () => {
           settings.interface_bounds === "1"
             ? 0.9
             : settings.interface_bounds === "0"
-            ? 0.8
-            : 1;
+              ? 0.8
+              : 1;
         styles.push(
-          `.desktop-game-interface { transform: scale(${scale}) !important; }`
+          `.desktop-game-interface { transform: scale(${scale}) !important; }`,
         );
       }
 
       if (settings.hitmarker_link !== "") {
         styles.push(
-          `.hitmark { content: url(${settings.hitmarker_link}) !important; }`
+          `.hitmark { content: url(${settings.hitmarker_link}) !important; }`,
         );
       }
 
       if (!settings.ui_animations) {
         styles.push(
-          "* { transition: none !important; animation: none !important; }"
+          "* { transition: none !important; animation: none !important; }",
         );
       }
 
       if (settings.rave_mode) {
         styles.push(
-          "canvas { animation: rotateHue 1s linear infinite !important; }"
+          "canvas { animation: rotateHue 1s linear infinite !important; }",
         );
       }
 
@@ -178,6 +179,92 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (relevantSettings.includes(e.detail.setting)) {
         updateUIFeatures();
+      }
+    });
+
+    async function start_chests_input(inputarray) {
+      let customchestlist = inputarray;
+      let response = await fetch(
+        "https://raw.githubusercontent.com/SheriffCarry/KirkaScripts/main/ConsoleScripts/Open%20All%20Chests.js",
+      );
+      let text = await response.text();
+      eval(text);
+    }
+
+    async function start_chests() {
+      let response = await fetch(
+        "https://raw.githubusercontent.com/SheriffCarry/KirkaScripts/main/ConsoleScripts/Open%20All%20Chests.js",
+      );
+      let text = await response.text();
+      eval(text);
+    }
+
+    async function start_cards_input(inputarray) {
+      let customcardlist = inputarray;
+      let response = await fetch(
+        "https://raw.githubusercontent.com/SheriffCarry/KirkaScripts/main/ConsoleScripts/Open%20All%20Cards.js",
+      );
+      let text = await response.text();
+      eval(text);
+    }
+
+    async function start_cards() {
+      let response = await fetch(
+        "https://raw.githubusercontent.com/SheriffCarry/KirkaScripts/main/ConsoleScripts/Open%20All%20Cards.js",
+      );
+      let text = await response.text();
+      eval(text);
+    }
+
+    document.getElementById("Opener").addEventListener("change", (e) => {
+      let value = document.getElementById("Opener").value;
+      if (value == "Chest_Golden") {
+        let customchestlist = [
+          { chestid: "077a4cf2-7b76-4624-8be6-4a7316cf5906", name: "Golden" },
+        ];
+        start_chests_input(customchestlist);
+      } else if (value == "Chest_Ice") {
+        let customchestlist = [
+          { chestid: "ec230bdb-4b96-42c3-8bd0-65d204a153fc", name: "Ice" },
+        ];
+        start_chests_input(customchestlist);
+      } else if (value == "Chest_Wood") {
+        let customchestlist = [
+          { chestid: "71182187-109c-40c9-94f6-22dbb60d70ee", name: "Wood" },
+        ];
+        start_chests_input(customchestlist);
+      } else if (value == "Chest_All") {
+        start_chests();
+      } else if (value == "Card_Cold") {
+        let customcardlist = [
+          { cardid: "723c4ba7-57b3-4ae4-b65e-75686fa77bf2", name: "Cold" },
+        ];
+        start_cards_input(customcardlist);
+      } else if (value == "Card_Girlsband") {
+        let customcardlist = [
+          {
+            cardid: "723c4ba7-57b3-4ae4-b65e-75686fa77bf1",
+            name: "Girls band",
+          },
+        ];
+        start_cards_input(customcardlist);
+      } else if (value == "Card_Party") {
+        let customcardlist = [
+          { cardid: "6281ed5a-663a-45e1-9772-962c95aa4605", name: "Party" },
+        ];
+        start_cards_input(customcardlist);
+      } else if (value == "Card_Soldiers") {
+        let customcardlist = [
+          { cardid: "9cc5bd60-806f-4818-a7d4-1ba9b32bd96c", name: "Soldiers" },
+        ];
+        start_cards_input(customcardlist);
+      } else if (value == "Card_Periodic") {
+        let customcardlist = [
+          { cardid: "a5002827-97d1-4eb4-b893-af4047e0c77f", name: "Periodic" },
+        ];
+        start_cards_input(customcardlist);
+      } else if (value == "Card_All") {
+        start_cards();
       }
     });
 
